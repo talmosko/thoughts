@@ -1,0 +1,136 @@
+{
+	// Place your snippets for typescript here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"demo1 backend jwt": {
+		"prefix": "demo1 expressjwt",
+		"body": [
+			"",
+			"import jwt from 'jsonwebtoken';",
+			"import { expressjwt } from 'express-jwt'",
+			"",
+			"// basic username based sign in",
+			"const validUsers = [",
+			"    { id: \"1\", name: \"Jane\", roles: [] },",
+			"    { id: \"2\", name: \"Steve\", roles: [] }",
+			"];",
+			"app.use(express.json());",
+			"app.post(\"/api/signIn\", (req, res) => {",
+			"    const user = validUsers.find(user => user.name === req.body.username);",
+			"    if (user)",
+			"        res.json(jwt.sign(user, process.env['JWT_SECRET'] || \"my secret\"));",
+			"    else",
+			"        res.status(404).json(\"Invalid user, try 'Steve' or 'Jane'\");",
+			"});",
+			"// end basic sign in implementation",
+			"app.use(expressjwt({",
+			"    secret: process.env['JWT_SECRET'] || \"my secret\",",
+			"    credentialsRequired: false,",
+			"    algorithms: ['HS256']",
+			"}));"
+		],
+		"description": "Log output to console"
+	},
+	"demo2 frontend jwt": {
+		"prefix": "demo2 frontend jwt",
+		"body": [
+			"export async function signIn(username: string) {",
+			"    const r = await axios.post('/api/signIn', { username });",
+			"    setAuthToken(r.data);",
+			"}",
+			"",
+			"export function setAuthToken(token: string | null) {",
+			"    if (token) {",
+			"        remult.setUser(jwtDecode(token));",
+			"        sessionStorage.setItem(\"Authorization\", token);",
+			"    }",
+			"    else {",
+			"        remult.setUser(undefined!);",
+			"        sessionStorage.removeItem(\"Authorization\");",
+			"    }",
+			"}",
+			"",
+			"axios.interceptors.request.use(config => {",
+			"    const token = sessionStorage.getItem(\"Authorization\");",
+			"    if (token)",
+			"        config.headers![\"Authorization\"] = \"Bearer \" + token;",
+			"    return config;",
+			"});",
+			"",
+			"// Initialize the auth token from session storage when the application loads",
+			"setAuthToken(sessionStorage.getItem(\"Authorization\"));"
+		],
+		"description": ""
+	},
+	// "demo3 sign in backend method": {
+	// 	"prefix": "demo3 sign in backend method",
+	// 	"body": [
+	// 		"@BackendMethod({ allowed: true })",
+	// 		"static async signIn(username: string) {",
+	// 		"    const validUsers = [",
+	// 		"        { id: \"1\", name: \"Jane\", roles: [] },",
+	// 		"        { id: \"2\", name: \"Steve\", roles: [] }",
+	// 		"    ];",
+	// 		"    const user = validUsers.find(user => user.name === username);",
+	// 		"",
+	// 		"    if (!user)",
+	// 		"        throw new Error(\"Invalid user, try 'Steve' or 'Jane'\");",
+	// 		"    return (await import('jsonwebtoken')).sign(user, process.env['JWT_SECRET'] || \"my secret\");",
+	// 		"}"
+	// 	],
+	// 	"description": "demo3 auth-sign-in"
+	// },
+	// "demo4 dataProvider:postgres": {
+	// 	"prefix": "demo4 dataProvider:postgres",
+	// 	"body": [
+	// 		"dataProvider: async () => {",
+	// 		"    if (process.env[\"NODE_ENV\"] === \"production\")",
+	// 		"        return createPostgresConnection({ configuration: \"heroku\" });",
+	// 		"    return undefined;",
+	// 		"},"
+	// 	],
+	// 	"description": "demo5 postgres"
+	// },
+	"demo6 harden heroku": {
+		"prefix": "demo5 harden heroku",
+		"body": [
+			"app.use(sslRedirect());",
+			"app.use(helmet({ contentSecurityPolicy: false }));",
+			"app.use(compression())"
+		],
+		"description": "demo6 harden heroku"
+	},
+	"demo7 serve static files": {
+		"prefix": "demo6 serve static files",
+		"body": [
+			"app.use(express.static(path.join(__dirname, '../')));",
+			"app.get('/*', function (req, res) {",
+			"   res.sendFile(path.join(__dirname, '../', 'index.html'));",
+			"});",
+			"",
+			"app.listen(process.env[\"PORT\"] || 3002, () => console.log(\"Server started\"));"
+		],
+		"description": "demo7 serve static files"
+	},
+	"if prod": {
+		"prefix": "if prod",
+		"body": [
+			"if (process.env[\"NODE_ENV\"] === \"production\")"
+		],
+		"description": "demo7 serve static files"
+	},
+	"csPostgres": {
+		"prefix": "csPostgres",
+		"body": [
+			"postgres://postgres:MASTERKEY@localhost/postgres"
+		]
+	},
+	"csMongo": {
+		"prefix": "csMongo",
+		"body": [
+			"mongodb://localhost:27017/local"
+		]
+	}
+}
