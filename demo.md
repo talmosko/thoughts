@@ -29,9 +29,9 @@ blockquote {
 - fix bash `notepad c:\Program Files\git\etc\profile.d\git-prompt.sh`
 
 ---
-> Hi I'm Noam honig, and in this video we'll write a full stack Todo app - using React, Node JS & Remult.
+> Hi I'm Noam honig, and in this video we'll write a full stack Todo app from scratch - using TypeScript, React, a NodeJS-express API server, and Remult.
 
-> By The end of this video we'll have a working Todo App, with Postgres database, basic Authentication and we'll deploy it to the cloud
+> By The end of this video we'll have a working Todo App, that uses a Postgres database, and has basic authentication, and we'll deploy it to the cloud.
 
 ---
 
@@ -56,7 +56,10 @@ open vite in browser.
 # We'll start by creating a basic todo list in react
 1. Clear app.tsx
 2. Delete app.css
-3. delete content of index.css
+3. delete contents of index.css
+
+> The fist thing we need is a model for the todo items - we'll call it the Task model
+
 4. add `shared/Task.ts`
 
 ---
@@ -79,15 +82,24 @@ function App() {
   </>
 }
 ```
+
+> let's add a checkbox that indicates the "completed" state of each task
+
 ```html
 <input type="checkbox" checked={task.completed}/>
 ```
 ---
 # Now let's add a backend
 install stuff
+
+> We need Express to serve our app's API, and Remult to do... well... you'll see in a minute...
+
 ```sh
 npm i express remult
 ```
+
+> For development, we'll use ts-node-dev to run the API server in watch mode.
+
 ```sh
 npm i -D @types/express ts-node-dev
 ```
@@ -95,7 +107,7 @@ npm i -D @types/express ts-node-dev
 ---
 
 # configuration
-> For our node js server, we'll use common js, so we need to remove type-module from the package json
+> Our server Node.js project is using the CommonJS module system. So we have to remove the "type": "module" entry from the package.json file that was created by Vite.
 
 1. `package.json` remove `type`: `module` -  For our node js server, we'll use common js, so we need to remove type-module from the package json***
    
@@ -115,7 +127,7 @@ npm i -D @types/express ts-node-dev
 ---
 3. Edit `tsconfig.json`, under `compilerOptions` remove `"experimentalDecorators": true`
 
->If you don't like decorators or prefer javascript, see our docs on how to do so.
+> We recommend using Remult decorators, but if you prefer not using decorators, or using javascript instead of typescript, that's OK, head on to remult's documentation and you'll find out how to do that.
 
 ---
 
@@ -136,7 +148,6 @@ npm i -D @types/express ts-node-dev
    ```sh
    npm run dev-node
    ```
-   > In our docs we explain how to use `concurrently` to run both vite and node js in one terminal
 4. create `api.ts` file
 5. register it on the server
 
