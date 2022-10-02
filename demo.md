@@ -3,6 +3,8 @@ marp: true
 paginate: true
 
 ---
+# Create a full stack app using react, express & remult
+---
 # Prepare
 <style>
   pre {
@@ -32,10 +34,9 @@ blockquote {
 > By The end of this video we'll have a working Todo App, with Postgres database, basic Authentication and we'll deploy it to the cloud
 
 ---
-# Create a full stack app using react, express & remult
----
 
-# Setup
+
+> We'll start by using vite to create our react app
 
 ```sh
 npm create vite todo-demo -- --template react-ts
