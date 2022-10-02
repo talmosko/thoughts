@@ -1,0 +1,16 @@
+/* @theme  noam*/
+@import 'default';
+
+:root {}
+
+pre {
+  line-height: 150%;
+}
+
+blockquote {
+  background-color: black;
+  color: white;
+  padding:1em;
+  font-family: "Arial";
+  font-size:48px
+}

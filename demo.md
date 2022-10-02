@@ -1,18 +1,50 @@
-
 ---
 marp: true
+paginate: true
 
 ---
+# Prepare
+<style>
+  pre {
+  line-height: 150%;
+}
+
+blockquote {
+  background-color: black;
+  color: white;
+  padding:1em;
+  font-family: "Arial";
+  font-size:48px
+}
+</style>
+
+- active zen mode
+- drop task table on pg
+- delete COOKIES
+- git remote remove heroku
+- delete tasks.json
+- Delete shared and backend folders
+- make sure network tab has only method and scorrectly scaled
+- Size the terminal window
+- open command and scale it to size
+
+---
+> Hi I'm Noam honig, and in this video we'll write a full stack Todo app - using React, Node JS & Remult.
+
+> By The end of this video we'll have a working Todo App, with Postgres database, basic Authentication and we'll deploy it to the cloud
+
+---
+
 # Setup
 
 ```sh
 npm create vite
 ```
-* name - `todo-demo`
-* react
-* typescript
+- name - `todo-demo`
+- react, typescript
 ```sh
 cd todo-demo
+code .
 ```
 install stuff
 ```sh
@@ -25,7 +57,7 @@ npm i -D @types/express ts-node-dev
 
 # configuration
 
-1. `package.json` remove `type`:`module` -  ***For our node js server we'll use common js, so we need to remove type-module from the package json***
+1. `package.json` remove `type`: `module` -  For our node js server, we'll use common js, so we need to remove type-module from the package json***
 
 2. Create `tsconfig.server.json`
 ```json
@@ -38,13 +70,14 @@ npm i -D @types/express ts-node-dev
 }
 ```
 
+---
 3. Edit `tsconfig.json`, under `compilerOptions` remove `"experimentalDecorators": true`
 
-***If you don't like decorators or prefer javascript, see our docs on how to do so.***
+>If you don't like decorators or prefer javascript, see our docs on how to do so.
 
 ---
 
-# Create the nodejs server
+# Create the Node JS server
 
 1. create server express `src/server/index.ts`
    ```ts
@@ -52,54 +85,85 @@ npm i -D @types/express ts-node-dev
    const app = express();
    app.listen(3002, () => console.log("Started"));
    ```
-2. start the node server
-   ```sh
-   npx ts-node-dev -P tsconfig.server.json src/server
+2. Add script to package json
+   ```json
+   "dev-node":"ts-node-dev -P tsconfig.server.json src/server",
    ```
-3. create `api.ts` file
-4. register it on the server
+3. start the node server
+   ```sh
+   npm run dev-node
+   ```
+4. create `api.ts` file
+5. register it on the server
 
 ---
+# Entity
 
-* add `shared/Task.ts`
-  * create the class with the members
-  * Add the decorators
-  * Indicate that we support also uuid
-* Register to api
-* Demo get
-* Demo post:
-  * Task a
-  * Task b, completed true
-  * Task c, completed false
-* Explain that data is saved by default to a json db, and we fully support all databases including ....
+- add `shared/Task.ts`
+  - create the class with the members
+> We'll use this TypeScript entity class as a single-source-of-truth for everything our application needs around that entity.
+
+--- 
+
+  - Add the Entity decorators
+> The Entity decorator tells Remult that this class will be used as a model for both frontend and backend code, so Remult should create CRUD API endpoints and a database table for this entity. 
+
+---
+[ highlight allow api crud ]
+>  I’ve told Remult to allow all CRUD operations for the Task entity. Later, I’ll restrict that.
+
+
+[add field decorators]
+> We also have decorators for each field to control its datatype and behavior.
+
+  - Indicate that we support also uuid
+---
+- Register to API
+- Demo get
+- Demo post:
+  ```json
+  { "title":"Setup","completed":true }
+  ```
+  - Entities
+  - Paging, Sorting & Filtering
+- Explain that data is saved by default to a json db, and we fully support all databases including ....
 
 ---
 
 # vite
-1. Open a new terminal and enter directory
+1. Open a new terminal and enter the right folder
 2. Run `npm run dev`
-   ***In our docs we explain how to use `concurrently` to run both vite and node js in one terminal***
+   > In our docs we explain how to use `concurrently` to run both vite and node js in one terminal
+
+---
+
+> To simplify configuration I'll use the proxy feature of vite dev server to forward all requests sent to api - to the backend server that is listening on port 3002 
+> 
 3. Configure proxy `vite.config.ts`
    ```ts
    server: { proxy: { '/api': 'http://localhost:3002' } }
    ```
+
 4. Demo proxy
 
 ---
-# App.tsx
+> let's start with our front end
 
 ```tsx
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  return <main>
-    <h2>Todo </h2>
-    <ul>
-      {tasks.map(task =>
-        <li key={task.id}>
-          {task.title}
-        </li>)}
-    </ul>
-  </main>
+  return <>
+    <h1>Todos</h1>
+    <main>
+      <ul>
+        {tasks.map(task => {
+          return <li key={task.id}>
+            {task.title}
+          </li>
+        })}
+      </ul>
+    </main>
+  </>
 }
 ```
 ---
@@ -107,59 +171,107 @@ function App() {
 ```tsx
 const taskRepo = remult.repo(Task);
 ```
-***returns a `Repository` of type Task that we'll use to interact with the backend. That same repository can be used in the front end to interact with the backend via REST API, and on the backend to interact with the Database***
+> we ask Remult to provide us with a repository object for the Task entity. We use this taskRepo object to interact with the backend.
+
 ```tsx
 useEffect(()=>{
   fetchTasks().then(setTasks)
 },[])
 ```
+--- 
+> You can see the GET request generated by this “find” call over here.
 Add Checkbox to indicate completed
 ```html
 <input type="checkbox" checked={task.completed}/>
 ```
 
 ---
-# Demo 
-1. Show limit and page
-   1. Show network tab
-2. Show order by
-3. Show Where
-## Style
+# styling
+
 ```css
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+}
 main {
-  text-align: left;
+  background-color: white;
+  padding: 16px;
+  box-shadow: 0 2px 4px #0003;
 }
 ul {
-  padding: 0;
-  list-style-type: none;
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+}
+li{
+  padding: 4px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+```
+
+---
+# Styling 2
+```css
+body {
+  font-size: x-large;
+}
+input{
+  font-size:x-large;
+  min-width: 18px;
+  min-height: 18px;
+  margin:4px;
+}
+h1 {
+  color: tomato;
+  font-weight: 100;
 }
 ```
 ---
+
+# Demo 
+>Let’s have a closer look at what we can do with this “find” method up here. Right now it just returns all the tasks from the database, but we can easily use it for paging
+1. Show limit and page
+   1. Show network tab
+---
+>These definitions go through the REST API request and into the database query on the backend.
+
+2. Show order by
+3. Show Where
+> you can see that everything here is simple REST API requests
+---
 # Add new Task
+> Let's add the "Add Task" functionality to our app
 ```ts
-const [newTaskTitle,setNewTaskTitle] = useState("");
+const [newTask, setNewTask] = useState("");
 ```
 ```html
-<input value={newTaskTitle}
-  onChange={e => setNewTaskTitle(e.target.value)} />
+<input placeholder="What needs to be done"
+  value={newTask}
+  onChange={e => setNewTask(e.target.value)}
+  onKeyDown={e => {
+    if (e.key === "Enter")
+      addTask()
+  }} />
 ```
+---
 ```ts
 const addTask = async () => {
-  if (newTaskTitle) {
-    setTasks([...tasks, await taskRepo.insert({
-      title: newTaskTitle
-    })]);
-    setNewTaskTitle('');
+  if (newTask) {
+    const task = await taskRepo.insert({
+      title:newTask
+    })
+    setTasks([...tasks, task])
+    setNewTask('');
   }
-};
+}
 ```
-* Add `onBlur` to `input`
 
 
 ---
 
 # Delete a task
-* use trick with `{` and then `(`
 ```ts
 const deleteTask = async () => {
   await taskRepo.delete(task);
@@ -170,22 +282,27 @@ const deleteTask = async () => {
 <button onClick={deleteTask} >x</button>
 ```
 
----
-
-# styling
 ```css
-li>button {
-  color: red;
-  font-weight: bolder;
+li>button{
+  color:red;
   padding: 4px 8px;
   visibility: hidden;
 }
-li:hover>button,
-li:focus-within>button {
+li:hover>button,li:focus-within>button{
   visibility: visible;
 }
 ```
-
+---
+# Add a few tasks
+- Create
+- Delete
+- Update
+- Validation
+- Backend methods
+- Authentication
+- Authorization
+- Database
+- Deployment
 ---
 # Set Completed
 ```ts
@@ -193,7 +310,6 @@ const setCompleted = async (completed: boolean) => {
   const updatedTask = await taskRepo.save({ ...task, completed });
   setTasks(tasks.map(t => t === task ? updatedTask : t));
 }
-
 ```
 ```tsx
 onChange={e => setCompleted(e.target.checked)}
@@ -203,17 +319,15 @@ onChange={e => setCompleted(e.target.checked)}
 # Edit Task
 
 ```ts
-const setTitle = (title: string) => {
-  const updatedTask = { ...task, title };
+const setTitle = async (title: string) => {
+  const t = { ...task, title };
   // refactor replace task
-  replaceTask(updatedTask);
+  replaceTask(t);
 }
 ```
-
-Refactor
 ```ts
-const replaceTask = (updatedTask: Task) => {
-  setTasks(tasks.map(t => t === task ? updatedTask : t));
+const replaceTask = (theTask: Task) => {
+  setTasks(tasks.map(t => t === task ? theTask : t));
 }
 ```
 ```html
@@ -222,8 +336,13 @@ const replaceTask = (updatedTask: Task) => {
   onChange={e => setTitle(e.target.value)} 
   />
 ```
-
----
+--- 
+```css
+input{
+  border:0;
+  margin:4px;
+}
+```
 # Save Task Edit
 ```ts
 const saveTask = async () => {
@@ -235,15 +354,26 @@ const saveTask = async () => {
 onBlur={saveTask}
 ```
 
+--- 
+>So, as you can see, using Remult I get full-stack, type-safe CRUD for this whole app, and I didn’t have to write or generate any boilerplate plumbing code. All I needed to do is define the Task entity, register it on the backend, and use Remult’s Repository object on the frontend.
 
 ---
 # Validation - `Task.ts`
+
+> Now let’s see how, with Remult, I can add data validation to the Task entity, and have it affect both the frontend and the backend.
+
+--- 
+> So let’s go over to our Task entity and let’s send an “options” object to the title field decorator and say “validate” and use a predefined “required” validator.
+
 ```ts
 @Fields.string({
     validate: Validators.required
 })
 title = '';
 ```
+---
+
+> Let's add try, catch and alert
 ```ts
 const saveTask = async () => {
   try {
@@ -253,14 +383,32 @@ const saveTask = async () => {
   }
 }
 ```
-* Demo
-* Demo post call
-* Refactor to Arrow Method
+--- 
+- Demo
+>If I clear the network tab and try again, 
+you can see there’s no request being sent to the backend because the validation check is done by javascript running in the browser. 
+
+---
+- Demo post call
+> Now let’s try to bypass that by sending a POST request to the “tasks” API route with an empty title
+> Doesn’t work and I get the same validation error from the API.
+
+---
+- Refactor to Arrow Method
+> Of course, you don’t have to use a predefined validator, you can use any arrow function to validate the data, 
+so I can say for example 
+> if task.title.length 
+is less than 3 
+throw “too short””. 
+
 ---
 
 # Backend methods
+> One of the nice things about Remult is that we can use the same CRUD syntax both in Frontend code, to interact with the API, and in Backend code, to interact directly with the database.
+
+--- 
 ```ts
-const setAll = async (completed: boolean) => {
+const setAllCompleted = async (completed: boolean) => {
   for (const task of await taskRepo.find()) {
     await taskRepo.save({ ...task, completed });
   }
@@ -268,15 +416,337 @@ const setAll = async (completed: boolean) => {
 };
 ```
 ```html
-<button onClick={() => setAll(!tasks.find(t => t.completed))}>Toggle Completed</button>
+  </ul>
+  <button onClick={setAllCompleted(true)}>Set All Completed</button>
+  <button onClick={setAllCompleted(false)}>Set All UnCompleted</button>
+</main>
 ```
+---
+# Styling
 ```css
-main>button {
-  background: seagreen;
-  color: #fff;
-  font-size: small;
+button{
+  font-size:large;
+  padding: 8px 16px;
+  margin: 4px;
+  margin: 4px;
+  background-color:seagreen;
+  color:white;
+  border-radius: 4px;
+}
+li>button {
+  background-color:#f5f5f5
 }
 ```
 ---
 
+# Backend method, refactor to backend
+>  looking at the “setAllCompleted” function in the App component. It works but it’s not efficient, because it’s sending multiple requests to update all of these tasks. Let’s refactor this code to run on the backend instead.
 
+--- 
+
+1. Add class `TasksController`
+2. Copy setAll to class
+3. Adjust syntax
+> The BackendMethod decorator tells Remult that if I call this method from Frontend code, don’t run this code, but instead send an API request and run it on the backend.
+
+4. Register on API
+---
+6. Call from front end
+> And now, in the App component, instead of this loop I can simply say: await TasksController.setAll(completed). That’s it.
+7. Show network tab
+--- 
+> One more important thing we get from this is type-safety for this API call, so if I try to send a string instead of a boolean here, TypeScript tells me I’ve made a mistake.
+
+
+---
+# Authentication 
+>Let's see how we can use Remult to control access to the REST API using simple, declarative code.
+
+--- 
+>Let’s say I want to restrict the API, so that only authenticated users can create, read and update tasks
+
+
+
+```ts
+@Entity("tasks", {
+    allowApiCrud: Allow.authenticated
+})
+```
+
+--- 
+- Show request fail
+> As soon as I save this my page will fail because I’m not authenticated. Let’s add a “sign-in” feature so we can make this app usable again.
+
+---
+> you can choose any way you like to implement an authentication flow. All you have to tell Remult is how to extract the current user from any incoming request.
+  
+> For this demo I’m going to use the Express “cookie-session” middleware,
+
+--- 
+Add session
+```sh
+npm i cookie-session
+npm i --save-dev @types/cookie-session
+```
+```ts
+import session from 'cookie-session';
+//...
+app.use(session({
+    secret: "my secret"
+}));
+```
+---
+
+# create `server/auth.ts`
+```ts
+export const auth = Router();
+auth.use(json());
+export const validUsers = [
+    { id: "1", name: "Jane", roles: [] },
+    { id: "2", name: "Steve", roles: [] },
+];
+```
+```ts
+auth.post('/api/signIn', (req, res) => {
+  const user = validUsers.find(user => user.name === req.body.username);
+  if (user) {
+    req.session!['user'] = user;
+    res.json(user);
+  } else {
+    res.status(404).json("Invalid user, try 'Steve' or 'Jane'")
+  }
+});
+```
+--- 
+register the `auth` on the server
+> Real-life authentication flows can be  more complex than this, but for a demo this will do.
+
+```ts
+app.use(auth);
+```
+
+---
+
+# Add `Auth.tsx` to `src`
+```tsx
+const Auth: React.FC<PropsWithChildren> = ({ children }) => {
+  return <>{children}</>
+}
+
+export default Auth;
+```
+- In main.tsx, wrap with Auth
+```ts
+<React.StrictMode>
+  <Auth>
+    <App />
+  </Auth>
+</React.StrictMode>
+```
+
+---
+# Back to Auth.tsx
+>Now let’s go back to the frontend and add user sign-in.
+
+```ts
+const [currentUser, setCurrentUser] = useState<UserInfo>();
+if (!currentUser)
+  return <>
+    <h1>Sign In</h1>
+  </>
+return <>{children}</>
+```
+--- 
+```tsx
+const [username, setUsername] = useState("");
+  //...
+<main>
+  <input value={username}
+    onChange={e => setUsername(e.target.value)}
+    placeholder="Type Steve or Jane"
+  />
+  <button>Sign In</button>
+</main>
+```
+
+---
+# Sign in
+```ts
+const signIn = async () => {
+  const result = await fetch('/api/signIn', {
+    method: "POST",
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({ username })
+  })
+  if (result.ok) {
+    setCurrentUser(await result.json())
+    setUsername('');
+  }
+  else
+    alert(await result.json());
+}
+```
+```
+<button onClick={signIn}>Sign In</button>
+```
+
+---
+# Demo
+1. Still no data
+> I need to tell Remult how to extract the current user from a request. For that, I’ll set the getUser option here to a function that returns the “request.session.user”.
+
+getUser:request=>request.session!['user'],
+
+---
+
+# On refresh, it requires signing in again,
+## server `auth.ts`
+```ts
+auth.get("/api/currentUser", (req, res) =>
+    res.json(req.session!['user'])
+);
+```
+## Client `Auth.tsx`
+```ts
+useEffect(() => {
+  fetch('/api/currentUser').then(async r => {
+    setCurrentUser(await r.json());
+  })
+}, []);
+```
+
+---
+# Sign out
+server `auth.ts`
+```ts
+auth.post("/api/signOut", (req, res) => {
+  req.session!['user'] = null;
+  res.sendStatus(200);
+});
+```
+Client `Auth.tsx`
+```tsx
+const signOut = async () => {
+  await fetch('/api/signOut', {method: "POST"});
+  setCurrentUser(undefined);
+}
+```
+- continue on the next page
+
+---
+
+```tsx
+return <>
+  <header style={{
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }}>
+    Hello {currentUser.name} <button>Sign Out</button>
+  </header>
+  {children}
+</>
+```
+
+---
+
+# Role-based Authorization
+Let’s go back to the Task entity and add another restriction -  only users who have an “admin” role can delete tasks.
+
+```ts
+@Entity("tasks", {
+  //...
+  allowApiDelete:"admin"
+})
+```
+`auth.ts`
+```ts
+{ id: "1", name: "Jane", roles: ["admin"] },
+```
+---
+# Database
+
+```sh
+npm i pg
+```
+
+```ts
+//...
+import { createPostgresConnection } from "remult/postgres";
+export const api = remultExpress({
+     //...
+     dataProvider: createPostgresConnection({
+         connectionString: "your connection string"
+     }),
+});
+```
+---
+# Deployment - adjust the build
+```json
+{
+  "compilerOptions": {
+    //...
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+      "src/server/index.ts"
+  ]
+}
+```
+--- 
+# Adjust package json
+```
+"build": "... && tsc -p tsconfig.server.json",
+"start":"node dist/server/"
+```
+---
+
+# Use express to return the react files
+We want to use the same nodejs server to return the static files etc...
+```ts
+import path from 'path';
+//...
+app.use(express.static(path.join(__dirname, '../')));
+app.get('/*', (_, res) => {
+  res.send(path.join(__dirname, '../', 'index.html'));
+})
+
+```
+
+--- 
+# Build and test
+1. Stop the server terminal
+2. npm run build
+3. npm run start
+   
+
+---
+# Replace hard coded strings with environment variables
+fix session secret 
+```ts
+secret: process.env['SESSION_SECRET'] || 'my secret'
+```
+```ts
+app.listen(process.env["PORT"] || 3002
+```
+```ts
+connectionString: process.env['DATABASE_URL'] || "...."
+```
+---
+
+# Deploy to railway.app
+1. Push to github as public repo
+2. Open `railway.app`
+3. Start new project
+4. Provision databases
+5. New, 
+   1. github repo
+6. Click on project,
+   1. variables
+      1. SESSION_SECRET - online uuid generator
+   2. Settings
+      1. Generate domain
