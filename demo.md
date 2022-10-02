@@ -250,8 +250,8 @@ const addTask = async () => {
 
 # Add a few tasks
 - Create
-- Delete
 - Update
+- Delete
 - Validation
 - Backend methods
 - Authentication
