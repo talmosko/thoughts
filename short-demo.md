@@ -21,13 +21,14 @@ blockquote {
 # Prepare
 - delete cookies
 - toggle auto hide
-- Zen mode
+- remove detect indentation
 - disable gitlens
-- return detect indentation
-- activate zen mode
+- Zen mode
 - make sure network tab has only method and is correctly scaled
 - Size the terminal window
+- clear terminal window
 - Make sure that the file explorer folders are collapsed and you can see frontend and backend
+- open browser at github.com/remult/react-todo.
 ---
 # Short remult demo
 ---
