@@ -16,6 +16,19 @@ blockquote {
   font-size:48px
 }
 </style>
+
+---
+# Prepare
+- delete cookies
+- toggle auto hide
+- Zen mode
+- disable gitlens
+- return detect indentation
+- activate zen mode
+- make sure network tab has only method and is correctly scaled
+- Size the terminal window
+- Make sure that the file explorer folders are collapsed and you can see frontend and backend
+---
 # Short remult demo
 ---
 >Hi I’m Noam Honig, and in this short video I’ll introduce you to Remult.
