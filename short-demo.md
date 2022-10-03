@@ -33,7 +33,7 @@ goto url on browser
 [ open terminal for npm run dev]
 
 >I’ve already cloned this project and run “npm install” so I can start by running 
-“npm run dev”.
+“the dev npm script”.
 
 >This is going to start both sides of this todo app - the frontend single-page-application, and the backend server that exposes a REST API.
 
