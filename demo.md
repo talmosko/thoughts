@@ -154,10 +154,6 @@ npm i -D @types/express ts-node-dev
 ---
 # Entity
 
-> We'll use this TypeScript entity class as a single-source-of-truth for everything our application needs around that entity.
-
---- 
-
   - Add the Entity decorators
 > The Entity decorator tells Remult that this class will be used as a model for both frontend and backend code, so Remult should create CRUD API endpoints and a database table for this entity. 
 
@@ -167,7 +163,7 @@ npm i -D @types/express ts-node-dev
 
 
 [add field decorators]
-> We also have decorators for each field to control its datatype and behavior.
+> We also have decorators for each field to define its datatype and behavior.
 
   - Indicate that we support also uuid
 ---
@@ -184,10 +180,11 @@ npm i -D @types/express ts-node-dev
 
 ---
 # Now let's use it in the frontend
----
 
-> To simplify configuration I'll use the proxy feature of vite dev server to forward all requests sent to `/api` - to the backend server that is listening on port 3002 
-> 
+> Remember that, in development, our API is served from port 3002, while our React app is serves from port 5173. So, in order to access our API from the React app, we have two options - either configure CORS, or use the proxy feature of Vite to forward API calls to port 3002. 
+---
+> Let's configure the proxy in vite.config.ts to forward all requests sent to routes beginning with `/api` - to the backend server that is listening on port 3002.
+
 3. Configure proxy `vite.config.ts`
    ```ts
    server: { proxy: { '/api': 'http://localhost:3002' } }
@@ -224,11 +221,8 @@ useEffect(()=>{
 3. Show Where
 > you can see that everything here is simple REST API requests
 ---
-
-# PUNCH!!!
+> Remember all I had to do was write a simple TypeScript class and register it with Remult, and I get a type-safe API client, with full auto-complete, and an API endpoint that fetches data from a database table, that was also created for me by Remult. Nice!
 ---
-
-
 
 # Add new Task
 > Let's add the "Add Task" functionality to our app
@@ -260,9 +254,14 @@ const addTask = async () => {
 
 
 # Add a few tasks
-- Create
-- Update
-- Delete
+
+> Let's complete the list of features for this todo app
+
+---
+
+- Create 
+- Update 
+- Delete 
 - Validation
 - Backend methods
 - Authentication
@@ -326,8 +325,7 @@ const deleteTask = async () => {
 ```
 
 --- 
->So, as you can see, using Remult I get full-stack, type-safe CRUD for this whole app, and I didn’t have to write or generate any boilerplate plumbing code. All I needed to do is define the Task entity, register it on the backend, and use Remult’s Repository object on the frontend.
-
+>Did you notice I didn't write any backend code to get the rest of these CRUD operations to work? That's because, with Remult, writing simple full-stack CRUD is, well... simple!
 ---
 # Validation - `Task.ts`
 
