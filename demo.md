@@ -29,9 +29,9 @@ blockquote {
 - fix bash `notepad c:\Program Files\git\etc\profile.d\git-prompt.sh`
 
 ---
-> Hi I'm Noam honig, and in this video we'll write a full stack Todo app - using React, Node JS & Remult.
+> Hi I'm Noam honig, and in this video we'll write a full stack Todo app from scratch - using TypeScript, React, a NodeJS-express API server, and Remult.
 
-> By The end of this video we'll have a working Todo App, with Postgres database, basic Authentication and we'll deploy it to the cloud
+> By The end of this video we'll have a working Todo App, that uses a Postgres database, and has basic authentication, and we'll deploy it to the cloud.
 
 ---
 
@@ -56,7 +56,10 @@ open vite in browser.
 # We'll start by creating a basic todo list in react
 1. Clear app.tsx
 2. Delete app.css
-3. delete content of index.css
+3. delete contents of index.css
+
+> The fist thing we need is a model for the todo items - we'll call it the Task model
+
 4. add `shared/Task.ts`
 
 ---
@@ -79,15 +82,24 @@ function App() {
   </>
 }
 ```
+
+> let's add a checkbox that indicates the "completed" state of each task
+
 ```html
 <input type="checkbox" checked={task.completed}/>
 ```
 ---
 # Now let's add a backend
 install stuff
+
+> We need Express to serve our app's API, and Remult to do... well... you'll see in a minute...
+
 ```sh
 npm i express remult
 ```
+
+> For development, we'll use ts-node-dev to run the API server in watch mode.
+
 ```sh
 npm i -D @types/express ts-node-dev
 ```
@@ -95,7 +107,7 @@ npm i -D @types/express ts-node-dev
 ---
 
 # configuration
-> For our node js server, we'll use common js, so we need to remove type-module from the package json
+> Our server Node.js project is using the CommonJS module system. So we have to remove the "type": "module" entry from the package.json file that was created by Vite.
 
 1. `package.json` remove `type`: `module` -  For our node js server, we'll use common js, so we need to remove type-module from the package json***
    
@@ -115,7 +127,7 @@ npm i -D @types/express ts-node-dev
 ---
 3. Edit `tsconfig.json`, under `compilerOptions` remove `"experimentalDecorators": true`
 
->If you don't like decorators or prefer javascript, see our docs on how to do so.
+> We recommend using Remult decorators, but if you prefer not using decorators, or using javascript instead of typescript, that's OK, head on to remult's documentation and you'll find out how to do that.
 
 ---
 
@@ -136,16 +148,11 @@ npm i -D @types/express ts-node-dev
    ```sh
    npm run dev-node
    ```
-   > In our docs we explain how to use `concurrently` to run both vite and node js in one terminal
 4. create `api.ts` file
 5. register it on the server
 
 ---
 # Entity
-
-> We'll use this TypeScript entity class as a single-source-of-truth for everything our application needs around that entity.
-
---- 
 
   - Add the Entity decorators
 > The Entity decorator tells Remult that this class will be used as a model for both frontend and backend code, so Remult should create CRUD API endpoints and a database table for this entity. 
@@ -156,7 +163,7 @@ npm i -D @types/express ts-node-dev
 
 
 [add field decorators]
-> We also have decorators for each field to control its datatype and behavior.
+> We also have decorators for each field to define its datatype and behavior.
 
   - Indicate that we support also uuid
 ---
@@ -173,10 +180,11 @@ npm i -D @types/express ts-node-dev
 
 ---
 # Now let's use it in the frontend
----
 
-> To simplify configuration I'll use the proxy feature of vite dev server to forward all requests sent to `/api` - to the backend server that is listening on port 3002 
-> 
+> Remember that, in development, our API is served from port 3002, while our React app is serves from port 5173. So, in order to access our API from the React app, we have two options - either configure CORS, or use the proxy feature of Vite to forward API calls to port 3002. 
+---
+> Let's configure the proxy in vite.config.ts to forward all requests sent to routes beginning with `/api` - to the backend server that is listening on port 3002.
+
 3. Configure proxy `vite.config.ts`
    ```ts
    server: { proxy: { '/api': 'http://localhost:3002' } }
@@ -213,11 +221,8 @@ useEffect(()=>{
 3. Show Where
 > you can see that everything here is simple REST API requests
 ---
-
-# PUNCH!!!
+> Remember all I had to do was write a simple TypeScript class and register it with Remult, and I get a type-safe API client, with full auto-complete, and an API endpoint that fetches data from a database table, that was also created for me by Remult. Nice!
 ---
-
-
 
 # Add new Task
 > Let's add the "Add Task" functionality to our app
@@ -249,9 +254,14 @@ const addTask = async () => {
 
 
 # Add a few tasks
-- Create
-- Update
-- Delete
+
+> Let's complete the list of features for this todo app
+
+---
+
+- Create 
+- Update 
+- Delete 
 - Validation
 - Backend methods
 - Authentication
@@ -315,8 +325,7 @@ const deleteTask = async () => {
 ```
 
 --- 
->So, as you can see, using Remult I get full-stack, type-safe CRUD for this whole app, and I didn’t have to write or generate any boilerplate plumbing code. All I needed to do is define the Task entity, register it on the backend, and use Remult’s Repository object on the frontend.
-
+>Did you notice I didn't write any backend code to get the rest of these CRUD operations to work? That's because, with Remult, writing simple full-stack CRUD is, well... simple!
 ---
 # Validation - `Task.ts`
 

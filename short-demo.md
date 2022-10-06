@@ -46,10 +46,7 @@ goto url on browser
 ---
 [ open terminal for npm run dev]
 
->I’ve already cloned this project and run “npm install” so I can start by running 
-“the dev npm script”.
-
->This is going to start both sides of this todo app - the frontend single-page-application, and the backend server that exposes a REST API.
+>I’ve already cloned this project and run “npm install” so I can start by running the "dev" script which is going to start both sides of this todo app - the frontend single-page-application, and the backend server that exposes a REST API.
 
 ---
 
@@ -60,18 +57,16 @@ goto url on browser
 >but, it also contains a “shared” folder, for code that is shared between the frontend and the backend.
 
 --- 
->You can use Remult together with any JavaScript web framework, any JavaScript frontend framework, and a wide selection of databases. 
-This also means you can deploy apps that use Remult to any Node.js server or serverless cloud provider.
-
----
+> Remult is incrementally adoptable and works with any JavaScript web framework, any frontend framework, and a wide selection of databases. 
 
 > For this demo I’ve used a React frontend, 
 > 
 > an Express server, and a simple JSON file database.
 
-[ goto browser 3000]
+---
+[ goto browser 5173]
 
-> Let’s go to localhost:3000 to see the todo app.
+> Let’s use this link to go to the todo app.
 ---
 
 
@@ -79,7 +74,8 @@ This also means you can deploy apps that use Remult to any Node.js server or ser
 
 [ insert Bananas and Apples ]
 
-> We need Bananas, and apples, 
+> We need Bananas, 
+> and apples, 
 
 ---
 
@@ -89,18 +85,18 @@ This also means you can deploy apps that use Remult to any Node.js server or ser
 
 [ insert Oranges]
 
-> Oranges, cake
+> Oranges... cake
 
-> you can see that everything here is simple REST API requests
-
----
-> I can tick them, I can update, I can delete… 
-
-> Again standard REST API requests are handled by the backend.
+> you can see these are simple REST API requests sent to the backend
 
 ---
+> I can tick the items... I can update them... I can delete… 
 
-> Let’s review the source code.
+> Again standard REST API requests handled by the backend.
+
+---
+
+> Let’s review the code
 
 [ open task.ts ]
 
@@ -123,7 +119,7 @@ This also means you can deploy apps that use Remult to any Node.js server or ser
 
 [ highlight field decorators ]
 
-> We also have decorators for each field to control its datatype and behavior.
+> We also have decorators for each field to define its datatype and behavior.
 
 ---
 
@@ -135,15 +131,19 @@ This also means you can deploy apps that use Remult to any Node.js server or ser
 
 [ goto vite.config.ts (last file)]
 
-> On the frontend I’ve used the proxy feature of vite dev server,
+> To simplify development, I’ve used the proxy feature of vite dev server,
 as you can see here, 
->to forward all requests sent to '/api' to the backend server that is listening on port 3002.
+>to forward all requests sent to the "api" route, to the API server that is listening on port 3002.
 
 ---
 
 [ app.tsx, collapse terminal and bar, highlight remult.repo ] 
 
-> On the  App.tsx, we ask Remult to provide us with a repository object for the Task entity. We use this taskRepo object to interact with the backend.
+> On the frontend, let's look at the App.tsx file
+
+> Here we ask Remult to provide us with a repository object for the Task entity. We use this taskRepo object to interact with the backend.
+
+---
 
 [ highlight useEffect find ]
 
@@ -159,7 +159,8 @@ as you can see here,
 
 [ scroll to add task function, and highlight repo.insert]
 
->Here we have the addTask function which uses taskRepo-insert to send a POST request to our REST API backend, which will trigger the creation of a new task in the database. Remult does all that without us having to write any code.
+>Here we have the addTask function which uses taskRepo-insert to send a POST request to our REST API backend, which will trigger the creation of a new task in the database. 
+>Remult does all that without us having to write any code.
 
 ---
 
@@ -179,7 +180,7 @@ as you can see here,
 
 ---
 
-[ scroll to repo-fund ]
+[ scroll to repo-find ]
 
 >Let’s have a closer look at what we can do with this “find” method up here. Right now it just returns all the tasks from the database, but we can easily use it for paging.
 
@@ -198,34 +199,33 @@ I’ll get the second page.
 [ order by ]
 
 > We can also sort the list by any of the fields 
-in ascending
+in ascending...
 >or descending order
 
 ---
 [where]
 
 > and we can also filter like this: 
-> show me only the todos that are completed
-> not completed
+> show me only the todos that are completed...
+> not completed...
 > or don’t filter.
 
 --- 
 
-> Now let’s see how, with Remult, I can add data validation to the Task entity, and have it affect both the frontend and the backend.
+> Now let’s see how, with Remult, I can add data validation checks to the Task entity, and have enforced both on the frontend and on the backend.
 
 ---
 
 [ goto task.ts, validate ]
 
-> So let’s go over to our Task entity and let’s send an “options” object to the title field decorator and say “validate”
-and use a predefined “required” validator.
+> So let’s go over to our Task entity and let’s use the "validate" option of the title field decorator and have it use a predefined “required” validator.
 
 ---
 
 [ save and see error ]
 
-> As soon as I’ve done that, if I’ll try to save an empty todo item, 
-I’ll get an error message. 
+> As soon as I’ve done that, if I try to save an empty todo item... 
+I get an error message. 
 
 --- 
 
@@ -236,25 +236,28 @@ you can see there’s no request being sent to the backend because the validatio
 
 ---
 
-[ post request using new request, remember to choose post] 
 
-> Now let’s try to bypass that by sending a POST request to the “tasks” API route with an empty title
+1. new request, 
+2. POST,
+3.  URL - localhost:3002/api/tasks
+4.  body {"title":""}
 
+> Now let’s try to bypass that... by sending a POST request... to the “tasks” API route... sending a JSON body with an empty title...
 > Doesn’t work and I get the same validation error from the API.
 
 ---
 
-> Of course, you don’t have to use a predefined validator, you can use any arrow function to validate the data, 
+> Of course, you don’t **have** to use a predefined validator, you can use any arrow function to validate the data...
 so I can say for example 
-“if task.title.length 
+“if... task.title.length 
 is less than 3 
-throw “too short””. 
+throw an exception - “too short””. 
 
 ---
 
 >Now, when I try to save 
-I’m going to get the “too short” error both here
-and in our API call
+I’m going to get the “too short” error both here...
+and in our API call...
 
 --- 
 
@@ -265,13 +268,13 @@ and in our API call
 ---
 [ add tasks controller ]
 
-> Let’s create a new file in the “shared” folder a call it TasksController.ts. 
+> Let’s create a new file in the “shared” folder a call it TasksController.ts... 
 In it, I’ll define a TasksController class,
 
 --- 
 [ copy set all ]
 
-> and let’s copy the code from the “setAll” function to this class. 
+> and let’s copy the “setAllCompleted” function into this class. 
 
 [adjust syntax ]
 
@@ -288,21 +291,21 @@ In it, I’ll define a TasksController class,
 
 [ and task repo]
 
- >All that’s left is to define a taskRepo just like before. 
+ >All that’s left is to define a taskRepo just like before using remult-repo of Task. 
  
  ---
 
- > and that’s it - we can use the same CRUD syntax both in Frontend code, to interact with the API, and in Backend code, to interact directly with the database.
+ > and that’s it - we can use the same syntax both in Frontend code, to interact with the API, and in Backend code, to interact directly with the database.
 
 ---
 
 [ register on index ]
 
-> Let’s register the TasksController here.
+> Let’s register the TasksController with Remult... here.
 
 [ call from app.tsx ]
 
-> And now, in the App component, instead of this loop I can simply say: await TasksController.setAll(completed). That’s it.
+> And now, in the App component... instead of this loop I can simply say: await TasksController.setAll(completed). That’s it.
 
 --- 
 
@@ -314,7 +317,7 @@ In it, I’ll define a TasksController class,
 [ change set all parameter to string]
 
 
-> One more important thing we get from this is type-safety for this API call, so if I try to send a string instead of a boolean here, TypeScript tells me I’ve made a mistake.
+> One more important thing we get from this is type-safety for this API call, so if I try to send a string... instead of a boolean here, TypeScript tells me I’ve made a mistake.
 
 ---
 
@@ -331,13 +334,12 @@ In it, I’ll define a TasksController class,
 > All I have to do is say here “allowApiCrud”-”Allow-authenticated”.
 
 > As soon as I save this my page will fail because I’m not authenticated. 
-> Let’s add a “sign-in” feature so we can make this app usable again.
 
 ---
 
 [ goto backend/index.ts ]
 
->You can choose any way you like to implement an authentication flow. All you have to tell Remult is, how to extract the current user from any incoming request.
+>Now, you can choose any way you like to implement an authentication flow. All you have to tell Remult, is how to extract the current user from any incoming request.
 
 ---
 
@@ -347,11 +349,11 @@ In it, I’ll define a TasksController class,
 
 [ app.use(session({secret:” my secret”}); app.use(auth) ]
 
-> I’ll add it here. 
+> I’ll add it here... 
 
 ---
 
-> And I’ll use an “auth” route I’ve already prepared in this “auth.ts” file. Let’s have a look at it.
+> And I’ll use an “auth” route... which I’ve already prepared in this “auth.ts” file. Let’s have a look at it.
 [ goto auth.ts ]
 
 ---
@@ -362,11 +364,11 @@ In it, I’ll define a TasksController class,
 
 [ highlight signIn ]
 
-> We have a signIn endpoint and a signOut endpoint. 
+> We have a signIn endpoint and a signOut endpoint.
 
 ---
 
-> Real-life authentication flows are much more complex than this, but for a demo this will have to do.
+> Real-life authentication flows are much more complex than this, but for a demo this will do.
 
 --- 
 
@@ -376,7 +378,7 @@ In it, I’ll define a TasksController class,
 
 ---
 
-> Now let’s go back to the frontend and add user sign-in.
+> Now let’s go back to the frontend and add a UI for user sign-in.
 
 [ goto main.tsx ]
 
@@ -392,18 +394,21 @@ In it, I’ll define a TasksController class,
 
 [ sign in as steve]
 
-> Let’s try it out. I’ll sign in as “Steve”... now I can see the todos again, and I can update them.
+> Let’s try it out... I’ll sign in as “Steve”... now I can see the todos again, and I can update them.
 
 --- 
 
->Let’s go back to the Task entity and add another restriction, only users who have an "admin" role can delete tasks.
+>Let’s go back to the Task entity and add another restriction... only users who have an "admin" role can delete tasks.
 
-> Now we Steve can add items, but he can't delete them.
+> Now, we see the user Steve can add items... but he can't delete them.
 
 ---
 [ goto auth.tsx ]
-> Let's make Jane an admin
+> Let's make Jane an "admin"
+
 [ add roles["admin"]]
+
+---
 
 [Sign in as Jane]
 > Now I’ll sign out and sign back in as Jane, and now I can delete.

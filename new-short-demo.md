@@ -31,45 +31,23 @@ blockquote {
 
 
 ---
->Hi I’m Noam Honig, and in this short video I’ll introduce you to Remult.
+> Hi I’m Noam Honig, I'm a full-stack developer and I love TypeScript.
 
->Remult is a CRUD framework for full-stack TypeScript.
----
-[ SLIDE ]
-> Today in many applications, we see business logic -  spread across front end code & backend code - important business rules such as validation and authorization are scattered through out that code.
+> What I don't like is application logic spread between front-end code and back-end code, when it actually belongs in one place.
 
----
-[ SLIDE ]
-> We see boilerplate code duplicated again and again, Often "get, put, post" routes are duplicated including whatever mistakes they may have.
+> I'm also a lazy developer, so I like my code short and simple. To API routes with boilerplate code I say - no thanks.
 
----
-[ SLIDE]
+> That's why I create Remult - a CRUD framework for full-stack TypeScript, that makes life easier.
 
-> Consider this "Product" entity, that often has:
+> Remult uses TypeScript entities, shared between front-end and back-end code. 
+> The entities serve as a single-source-of-truth for: database queries, a REST API with access control, validation rules and type-safe data fetching for front-end code.
 
-> Sql code or ORM calls
-> routes for each "get, put, post, delete" method
-> Front end code that'll fetch that data from the backend
-
----
-
-[ SLIDE ]
-> We want that same typescript entity to server as a single source of truth for it's business rules.
-
----
-
-[ SLIDE ]
->I want to true code sharing of Types, Validations and Authorization between the backend and the front end
-
- 
-[ SLIDE ]
->I don't want, any Vendor lock-in, code generation, boilerplate code & config files.
-
----
-[ SLIDE ]
-> In this video we'l..
-
-[ SLIDE ]
+> Let me show you how in just a few minutes, I turn a front-end only React todo app into a full-stack app with a Postgres database, including: 
+> server-side paging, sorting and filtering, 
+> full CRUD operations, 
+> validation, 
+> server-side logic, 
+> authentication and authorization.
 
 ---
 > Here we have a react todo app that uses vite.
