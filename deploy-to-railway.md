@@ -61,5 +61,5 @@ Once you've cloned the project it is actually ready for deployment, but let's re
    4. Click on the generated url - and be a little patient - it will take it a few minutes to be up and running.
 
 
-Here's a video of our BudapestJS meetup where we showed how to turn a front-end React app into a full-stack app using Node.js, Postgres, and Remult. The video's timeline is positioned at the deployment stage.
+Here's a video of our BudapestJS meetup where we used used this method as part of our demo where we showed how to turn a front-end React app into a full-stack app using Node.js, Postgres, and Remult. The video's timeline is positioned at the deployment stage.
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CnCaMQCu3Kc?start=1806" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
