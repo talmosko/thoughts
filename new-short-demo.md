@@ -31,23 +31,52 @@ blockquote {
 
 
 ---
-> Hi I’m Noam Honig, I'm a full-stack developer and I love TypeScript.
+> Hi I’m Noam Honig, I'm a full-stack developer and I ***love*** TypeScript.
 
-> What I don't like is application logic spread between front-end code and back-end code, when it actually belongs in one place.
+> What I ***don't like*** is application logic spread between front-end code and back-end code, when it actually belongs in one place.
 
-> I'm also a lazy developer, so I like my code short and simple. To API routes with boilerplate code I say - no thanks.
+---
 
-> That's why I create Remult - a CRUD framework for full-stack TypeScript, that makes life easier.
+> I'm also a lazy developer, so I ***like*** my code short and simple - and I really don't like maintaining API routes with boilerplate code.
+
+> That's why I created Remult - a CRUD framework for full-stack TypeScript, that makes life easier.
+
+---
 
 > Remult uses TypeScript entities, shared between front-end and back-end code. 
-> The entities serve as a single-source-of-truth for: database queries, a REST API with access control, validation rules and type-safe data fetching for front-end code.
+---
+> The entities serve as a single-source-of-truth for:
+>  database queries,
+>  REST API routes 
+>  access control,
+>  validation rules ,
+>  and type-safe data fetching for front-end code.
+--- 
 
 > Let me show you how in just a few minutes, I turn a front-end only React todo app into a full-stack app with a Postgres database, including: 
-> server-side paging, sorting and filtering, 
+> server-side - paging sorting and filtering, 
 > full CRUD operations, 
 > validation, 
 > server-side logic, 
-> authentication and authorization.
+> authentication 
+> and authorization.
+
+
+---
+
+> Well, there you have it. 
+> Full CRUD operations across the stack  with no boilerplate, 
+> end-to-end type-safety, 
+> sharing code between Frontend  and Backend , 
+> and a single-source-of-truth - our TypeScript entity. 
+
+---
+
+> These are the core features of Remult. 
+
+[ url, remult.dev ]
+
+> If you want to find out more, go to remult.dev. 
 
 ---
 > Here we have a react todo app that uses vite.
@@ -58,7 +87,7 @@ blockquote {
 [ goto app.tsx]
 > * We have a state for the task array
 > * A state for the new task title
-> * And an `addTask` method
+> * And an `addTask` function
 > 
 > Let's add a few tasks (Sleep, Work, Eat)
 
@@ -67,11 +96,11 @@ blockquote {
 > Using the `setAllCompleted` We can set them all as completed or uncompleted
 
 [ Scroll to set completed ]
-> We can tick individual items using the `setCompleted` method
+> We can tick individual items using the `setCompleted` function
 
 ---
 
-> And we can delete items using the `deleteTask` method
+> And we can delete items using the `deleteTask`  function
 
 ---
 > Let's turn this app into a `full-stack` app.
@@ -177,7 +206,7 @@ const taskRepo = remult.repo(Task);
 > Remember all I had to do was write a simple TypeScript class and register it with Remult, and I get a type-safe API client, with full auto-complete, and an API endpoint that fetches data from a database table, that was also created for me by Remult. Nice!
 ---
 
-> Now let's adjust the code of the `addTask` method to use `taskRepo.insert`
+> Now let's adjust the code of the `addTask` function to use `taskRepo.insert`
 
 > Any task that we add, causes a `POST` call to the backend to save the task.
 
@@ -193,13 +222,13 @@ const taskRepo = remult.repo(Task);
 
 ---
 
-> Let's adjust adjust `setCompleted` method to save the change.
+> Let's adjust adjust `setCompleted` function to save the change.
 
 > Now as I tick the tasks, a `PUT` request gets sent to the backend
 
 ---
 
-> Let's fix the `deleteTask` method to delete.
+> Let's fix the `deleteTask` function to delete.
 
 > And let's add a task and delete it. - see,  a `delete` rest api call
 
@@ -369,7 +398,7 @@ In it, I’ll define a TasksController class,
 
 [ back to index.ts - get user]
 
-> Next, I need to tell Remult how to extract the current user from a request. For that, I’ll set the getUser option here to a function that returns the “request.session.user”.
+> Next, I need to tell Remult how to extract the current user from a request. For that, I’ll set the getUser option here to a function that returns the req.session.user”.
 
 ---
 
