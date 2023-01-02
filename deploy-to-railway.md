@@ -1,10 +1,10 @@
-# Deploy to Railway.app
+# How we switched from Heroku deployment to Railway.app, easily!
 
-Now that Heroku no longer offers a free version, it's time to explore alternatives. One such alternative is [Railway.app](https://railway.app), which provides Node.js hosting, database hosting, and a great developer experience.
+It was time for me to prepare for a live demo at a meetup. As always, I used Heroku, my go-to deployment service. Unexpectedly, I discovered that Heroku no longer offers a free version 😱 and it's time to explore alternatives. After investigating some alternatives, I found [Railway.app](https://railway.app), which provides Node.js hosting, database hosting, and a great developer experience.
 
 Railway.app has a great free plan, which includes 5$ monthly credits and a 500-hour limit that disappears as soon as you enter your credit card details. With these credits, you can run approximately two full sites with a database and still have a few cents left over 😋.
 
-To demonstrate the deployment process we'll use the following GitHub repository that I've created in my last [BudapestJS](https://www.meetup.com/budapest-js/) meetup [Todo Demo](https://github.com/noam-honig/budapestjs-meetup), using [Remult](https://remult.dev).
+To demonstrate the deployment process with Railway we'll use the following GitHub repository that I've created in my last [BudapestJS](https://www.meetup.com/budapest-js/) meetup [Todo Demo](https://github.com/noam-honig/budapestjs-meetup), using [Remult](https://remult.dev).
 
 Once you've cloned the project it is actually ready for deployment, but let's review some of the key settings I've set for it before the deployment, in `src/backend/index.ts` file:
 
